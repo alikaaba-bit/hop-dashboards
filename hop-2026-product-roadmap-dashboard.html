@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOP 2026 Product Roadmap | Threadies + Muddies + PixelPop</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --threadies-primary: #8B7355;
+            --threadies-light: #D4C4B0;
+            --muddies-primary: #E07B39;
+            --muddies-light: #F5D4BC;
+            --pixelpop-primary: #7B68EE;
+            --pixelpop-light: #E0DBFF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--dark) 0%, #374151 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-left p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-threadies { background: var(--threadies-primary); color: white; }
+        .badge-muddies { background: var(--muddies-primary); color: white; }
+        .badge-pixelpop { background: var(--pixelpop-primary); color: white; }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .kpi-card.threadies { border-top: 4px solid var(--threadies-primary); }
+        .kpi-card.muddies { border-top: 4px solid var(--muddies-primary); }
+        .kpi-card.pixelpop { border-top: 4px solid var(--pixelpop-primary); }
+        .kpi-card.total { border-top: 4px solid var(--dark); }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            border: none;
+            background: var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab:hover { background: #E5E7EB; }
+        .tab.active-threadies { background: var(--threadies-primary); color: white; }
+        .tab.active-muddies { background: var(--muddies-primary); color: white; }
+        .tab.active-pixelpop { background: var(--pixelpop-primary); color: white; }
+        .tab.active-all { background: var(--dark); color: white; }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+
+        /* Product Cards */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--gray);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .product-card.threadies { border-left-color: var(--threadies-primary); }
+        .product-card.muddies { border-left-color: var(--muddies-primary); }
+        .product-card.pixelpop { border-left-color: var(--pixelpop-primary); }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .product-collection {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .product-score {
+            background: var(--dark);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .product-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            color: var(--gray);
+            font-size: 0.75rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .product-why {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #E5E7EB;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #E5E7EB;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--dark);
+        }
+
+        .timeline-item.q1::before { background: #3B82F6; }
+        .timeline-item.q2::before { background: #10B981; }
+        .timeline-item.q3::before { background: #F59E0B; }
+        .timeline-item.q4::before { background: #EF4444; }
+
+        .timeline-quarter {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .timeline-theme {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 12px;
+        }
+
+        .timeline-products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .timeline-product {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .timeline-product.threadies { background: var(--threadies-light); color: var(--threadies-primary); }
+        .timeline-product.muddies { background: var(--muddies-light); color: var(--muddies-primary); }
+        .timeline-product.pixelpop { background: var(--pixelpop-light); color: var(--pixelpop-primary); }
+
+        /* Top 5 Table */
+        .top5-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .top5-table th, .top5-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .top5-table th {
+            background: var(--light-gray);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .top5-table td {
+            font-size: 0.9rem;
+        }
+
+        .rank-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .rank-badge.gold { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .rank-badge.silver { background: linear-gradient(135deg, #9CA3AF, #6B7280); }
+        .rank-badge.bronze { background: linear-gradient(135deg, #D97706, #B45309); }
+
+        /* Do Not Pursue */
+        .dont-pursue {
+            display: grid;
+            gap: 16px;
+        }
+
+        .dont-pursue-item {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .dont-pursue-title {
+            font-weight: 700;
+            color: #DC2626;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dont-pursue-reason {
+            font-size: 0.9rem;
+            color: #7F1D1D;
+        }
+
+        /* Keywords */
+        .keywords-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .keyword-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .keyword-term {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .keyword-platform {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Internal Data Section */
+        .data-highlight {
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .data-highlight h3 {
+            color: #4338CA;
+            margin-bottom: 12px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .data-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .data-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4338CA;
+        }
+
+        .data-item-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Brand Strategy Cards */
+        .brand-strategy {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .strategy-card {
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .strategy-card.threadies { background: linear-gradient(135deg, var(--threadies-primary), #6B5344); }
+        .strategy-card.muddies { background: linear-gradient(135deg, var(--muddies-primary), #C4632B); }
+        .strategy-card.pixelpop { background: linear-gradient(135deg, var(--pixelpop-primary), #5B4FCF); }
+
+        .strategy-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strategy-card p {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            margin-bottom: 12px;
+        }
+
+        .strategy-whitespace {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .strategy-whitespace strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard { padding: 12px; }
+            .header { padding: 20px; }
+            .header-left h1 { font-size: 1.5rem; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            .section { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>HOP 2026 Product Roadmap</h1>
+                <p>Threadies + Muddies + PixelPop | 24 Products | 4 Quarters</p>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-threadies">THREADIES</span>
+                <span class="badge badge-muddies">MUDDIES</span>
+                <span class="badge badge-pixelpop">PIXELPOP</span>
+            </div>
+        </div>
+
+        <!-- Internal Data Highlight -->
+        <div class="data-highlight">
+            <h3>Internal Performance Data (2025-2026 POs)</h3>
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-item-value">$2.17M</div>
+                    <div class="data-item-label">Total Tracked Revenue</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-item-value">324,279</div>
+                    <div class="data-item-label">Total Units Sold</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-item-value">$162,633</div>
+                    <div class="data-item-label">MUDDIES Revenue (7.5%)</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-item-value">$109,513</div>
+                    <div class="data-item-label">PIXELPOP Revenue (5.1%)</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-item-value">85%</div>
+                    <div class="data-item-label">Target Revenue Share</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-item-value">7%</div>
+                    <div class="data-item-label">TJX Revenue Share</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card total">
+                <div class="kpi-value">24</div>
+                <div class="kpi-label">Total 2026 Products</div>
+            </div>
+            <div class="kpi-card threadies">
+                <div class="kpi-value">8</div>
+                <div class="kpi-label">THREADIES Products</div>
+            </div>
+            <div class="kpi-card muddies">
+                <div class="kpi-value">8</div>
+                <div class="kpi-label">MUDDIES Products</div>
+            </div>
+            <div class="kpi-card pixelpop">
+                <div class="kpi-value">8</div>
+                <div class="kpi-label">PIXELPOP Products</div>
+            </div>
+            <div class="kpi-card total">
+                <div class="kpi-value">$15.78</div>
+                <div class="kpi-label">Avg MSRP</div>
+            </div>
+            <div class="kpi-card total">
+                <div class="kpi-value">5</div>
+                <div class="kpi-label">Products Score 20/20</div>
+            </div>
+        </div>
+
+        <!-- Brand Strategy Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Brand Positioning & Whitespace</h2>
+            </div>
+            <div class="brand-strategy">
+                <div class="strategy-card threadies">
+                    <h4>THREADIES</h4>
+                    <p>Slow craft anchor for meditative, tactile, display-worthy fiber craft. The anti-screen, anti-hustle brand extension.</p>
+                    <div class="strategy-whitespace">
+                        <strong>Whitespace We Own:</strong>
+                        Adult-first, decor-worthy fiber craft at $12-24 TJX price points. Punch needle with display-ready frames.
+                    </div>
+                </div>
+                <div class="strategy-card muddies">
+                    <h4>MUDDIES</h4>
+                    <p>Expressive, tactile, paint-based craft line. "Therapeutic mess with a beautiful result." Adult play, not art class.</p>
+                    <div class="strategy-whitespace">
+                        <strong>Whitespace We Own:</strong>
+                        Textured, dimensional paint craft at $10-20. Famous art reimagined for DIY (Van Gogh, Monet proven winners).
+                    </div>
+                </div>
+                <div class="strategy-card pixelpop">
+                    <h4>PIXELPOP</h4>
+                    <p>Dopamine-driven, visually bold, collectible craft. Satisfying, repetitive experiences with high-impact visual payoff.</p>
+                    <div class="strategy-whitespace">
+                        <strong>Whitespace We Own:</strong>
+                        3D display pixel art, occasion-based kits (Date Night, Girls Night), adult-positioned decor-worthy pixel art.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">Revenue by Category (Internal Data)</div>
+                <canvas id="revenueChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">2026 Products by Brand</div>
+                <canvas id="productsChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">MSRP Distribution</div>
+                <canvas id="msrpChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Channel Strategy</div>
+                <canvas id="channelChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top 5 Launches -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Top 5 Highest-Confidence Launches</h2>
+            </div>
+            <table class="top5-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Product</th>
+                        <th>Brand</th>
+                        <th>Score</th>
+                        <th>Channel</th>
+                        <th>MSRP</th>
+                        <th>Rationale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="rank-badge gold">1</div></td>
+                        <td><strong>3D Frame - Almond Blossom</strong></td>
+                        <td><span class="badge badge-muddies" style="font-size:0.75rem">MUDDIES</span></td>
+                        <td><strong>20/20</strong></td>
+                        <td>TJX/Mass</td>
+                        <td>$16.99-19.99</td>
+                        <td>Proven format (Starry Night $22K), Van Gogh validated</td>
+                    </tr>
+                    <tr>
+                        <td><div class="rank-badge gold">1</div></td>
+                        <td><strong>Magnet Set - Impressionist Icons</strong></td>
+                        <td><span class="badge badge-muddies" style="font-size:0.75rem">MUDDIES</span></td>
+                        <td><strong>20/20</strong></td>
+                        <td>TJX/Mass</td>
+                        <td>$12.99</td>
+                        <td>Proven ($18K rev), low COG, high turn, impulse buy</td>
+                    </tr>
+                    <tr>
+                        <td><div class="rank-badge gold">1</div></td>
+                        <td><strong>Girls Night Kit - Cocktail Hour</strong></td>
+                        <td><span class="badge badge-pixelpop" style="font-size:0.75rem">PIXELPOP</span></td>
+                        <td><strong>20/20</strong></td>
+                        <td>Mass/TJX</td>
+                        <td>$16.99</td>
+                        <td>Validated theme, 4-pack social positioning</td>
+                    </tr>
+                    <tr>
+                        <td><div class="rank-badge gold">1</div></td>
+                        <td><strong>Reset - French Riviera</strong></td>
+                        <td><span class="badge badge-pixelpop" style="font-size:0.75rem">PIXELPOP</span></td>
+                        <td><strong>20/20</strong></td>
+                        <td>Mass/TJX</td>
+                        <td>$9.99-11.99</td>
+                        <td>Lowest COG ($1.87), proven format, travel expansion</td>
+                    </tr>
+                    <tr>
+                        <td><div class="rank-badge silver">5</div></td>
+                        <td><strong>Coaster Kit - Textured Terracotta</strong></td>
+                        <td><span class="badge badge-threadies" style="font-size:0.75rem">THREADIES</span></td>
+                        <td><strong>19/20</strong></td>
+                        <td>TJX/Specialty</td>
+                        <td>$14.99</td>
+                        <td>New category entry, functional end product, whitespace</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Launch Timeline -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">2026 Launch Calendar</h2>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item q1">
+                    <div class="timeline-quarter">Q1 2026 (Jan-Mar)</div>
+                    <div class="timeline-theme">Valentine's + Spring Preview</div>
+                    <div class="timeline-products">
+                        <span class="timeline-product pixelpop">Date Night Kit - Sunset Toast</span>
+                        <span class="timeline-product threadies">Punch Needle Duo - Date Night</span>
+                        <span class="timeline-product muddies">3D Frame - Almond Blossom</span>
+                        <span class="timeline-product muddies">Magnet Set - Impressionist Icons</span>
+                    </div>
+                </div>
+                <div class="timeline-item q2">
+                    <div class="timeline-quarter">Q2 2026 (Apr-Jun)</div>
+                    <div class="timeline-theme">Spring/Summer Core + Travel</div>
+                    <div class="timeline-products">
+                        <span class="timeline-product pixelpop">3D Display - Amalfi Coast</span>
+                        <span class="timeline-product pixelpop">Reset - French Riviera</span>
+                        <span class="timeline-product threadies">Embroidery Hoop Set - Wildflower Trio</span>
+                        <span class="timeline-product muddies">Texture Canvas - Abstract Wave</span>
+                    </div>
+                </div>
+                <div class="timeline-item q3">
+                    <div class="timeline-quarter">Q3 2026 (Jul-Sep)</div>
+                    <div class="timeline-theme">Social Craft + Functional Objects</div>
+                    <div class="timeline-products">
+                        <span class="timeline-product pixelpop">Girls Night Kit - Cocktail Hour</span>
+                        <span class="timeline-product threadies">Coaster Kit - Textured Terracotta</span>
+                        <span class="timeline-product muddies">Coaster Kit - Terrazzo Tiles</span>
+                        <span class="timeline-product pixelpop">Coasters - Mediterranean Tiles</span>
+                    </div>
+                </div>
+                <div class="timeline-item q4">
+                    <div class="timeline-quarter">Q4 2026 (Oct-Dec)</div>
+                    <div class="timeline-theme">Holiday + Gifting</div>
+                    <div class="timeline-products">
+                        <span class="timeline-product pixelpop">3D Display - Winter Village</span>
+                        <span class="timeline-product muddies">Textured Canvas Trio - Monet's Garden</span>
+                        <span class="timeline-product threadies">Punch Needle Frame - Linen Bloom</span>
+                        <span class="timeline-product pixelpop">Gallery Frame - Botanical Trio</span>
+                        <span class="timeline-product muddies">Trinket Tray - Botanical Bliss</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Cards Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Full Product Lineup</h2>
+                <div class="tabs">
+                    <button class="tab active-all" onclick="filterProducts('all')">All (24)</button>
+                    <button class="tab" onclick="filterProducts('threadies')">Threadies (8)</button>
+                    <button class="tab" onclick="filterProducts('muddies')">Muddies (8)</button>
+                    <button class="tab" onclick="filterProducts('pixelpop')">PixelPop (8)</button>
+                </div>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- THREADIES Products -->
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Punch Needle Frame - Linen Bloom</div>
+                            <div class="product-collection">Botanical Stitches</div>
+                        </div>
+                        <div class="product-score">18/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$16.99-19.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Mass</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">8x8" shadow box frame</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Frame-included eliminates finishing anxiety. Botanical = proven winner. Looks like $40 finished art.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Coaster Kit - Textured Terracotta</div>
+                            <div class="product-collection">Texture & Tone</div>
+                        </div>
+                        <div class="product-score">19/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">4 coaster bases + tool</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Functional end product. Neutral aesthetic. One-evening project. No one sells punch needle coasters.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Punch Needle Duo - Date Night Designs</div>
+                            <div class="product-collection">Stitch Night</div>
+                        </div>
+                        <div class="product-score">15/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$24.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Valentine's + Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">2 coordinating 6x6" designs</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Social craft positioning. Gift-ready. Two people, one box, one night.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Embroidery Hoop Set - Wildflower Trio</div>
+                            <div class="product-collection">Botanical Stitches</div>
+                        </div>
+                        <div class="product-score">17/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$12.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Specialty / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">3 mini hoops (4")</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Entry price point. Gallery-wall ready. Three designs = variety. Trio = value perception.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Trivet Kit - Woven Warmth</div>
+                            <div class="product-collection">Texture & Tone</div>
+                        </div>
+                        <div class="product-score">16/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$17.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Fall / Holiday</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Loom base + yarn</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Functional. Kitchen-adjacent. Looks expensive when done. No trivet kits exist in market.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Mini Wall Hanging - Desert Moon</div>
+                            <div class="product-collection">Texture & Tone</div>
+                        </div>
+                        <div class="product-score">16/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Mass</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Macrame-style kit</span>
+                        </div>
+                    </div>
+                    <div class="product-why">"Desert modern" aesthetic still strong at HomeGoods. Kit format vs. finished macrame = DIY ownership appeal.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Yarn Art Frame - Sunset Waves</div>
+                            <div class="product-collection">Cozy Corners</div>
+                        </div>
+                        <div class="product-score">14/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$19.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Frame with pegs + yarn</span>
+                        </div>
+                    </div>
+                    <div class="product-why">String art revival. Abstract = modern. Frame-included = gift-ready. Adult abstract vs. kids-coded animals.</div>
+                </div>
+
+                <div class="product-card threadies" data-brand="threadies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Needle Felting Kit - Stone Stack</div>
+                            <div class="product-collection">Cozy Corners</div>
+                        </div>
+                        <div class="product-score">14/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$15.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Specialty / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Felting wool + needle + base</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Needle felting trending but 90% animals. Zen stone stack = meditative + decor-worthy. Non-character approach.</div>
+                </div>
+
+                <!-- MUDDIES Products -->
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">3D Frame - Almond Blossom</div>
+                            <div class="product-collection">Masterpiece Series</div>
+                        </div>
+                        <div class="product-score">20/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$16.99-19.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Mass / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Spring / Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">8x10" pre-textured canvas</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Starry Night 3D frame = $22,819 proven. Almond Blossom = softer, more feminine, spring seasonal angle.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Magnet Set - Impressionist Icons</div>
+                            <div class="product-collection">Masterpiece Series</div>
+                        </div>
+                        <div class="product-score">20/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$12.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Mass</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">6 pre-molded magnets</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Van Gogh magnets = $18,780 proven. Expanding to broader "impressionist" theme. Functional craft end product.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Textured Canvas Trio - Monet's Garden</div>
+                            <div class="product-collection">Nature Textures</div>
+                        </div>
+                        <div class="product-score">17/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$24.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">3 coordinating 5x7" canvases</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Gallery wall trend + impressionist botanical = premium perception. Coordinated triptych format unique in paint craft.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Coaster Kit - Terrazzo Tiles</div>
+                            <div class="product-collection">Artful Objects</div>
+                        </div>
+                        <div class="product-score">18/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">4 ceramic blanks + paint</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Terrazzo still trending. Functional end product. One-evening completion. Paint-your-own coasters don't exist at this quality.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Mini Canvas 4-Pack - Sunset Series</div>
+                            <div class="product-collection">Mindful Making</div>
+                        </div>
+                        <div class="product-score">19/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$12.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Mass</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">4 pre-textured 4x4" canvases</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Entry price point. Quick completion. Instagram-worthy results. 4-pack coordinated mini canvases = unique format.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Trinket Tray - Botanical Bliss</div>
+                            <div class="product-collection">Artful Objects</div>
+                        </div>
+                        <div class="product-score">16/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$17.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Specialty / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round / Gifting</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Ceramic tray + paint + gold leaf</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Trinket trays huge at TJX/HomeGoods. DIY angle = differentiation. No paint-your-own trinket trays in market.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Texture Canvas - Abstract Wave</div>
+                            <div class="product-collection">Mindful Making</div>
+                        </div>
+                        <div class="product-score">19/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Mass</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">8x10" raised wave pattern</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Coastal decor is evergreen. Abstract = modern. Pre-raised texture vs. flat canvas = tactile satisfaction.</div>
+                </div>
+
+                <div class="product-card muddies" data-brand="muddies">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Paint Pour Kit - Geode Slice</div>
+                            <div class="product-collection">Mindful Making</div>
+                        </div>
+                        <div class="product-score">13/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$19.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Specialty / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Pre-shaped resin blank + pour paints</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Paint pouring trending. Geode aesthetic still strong. Pre-cut shape vs. random canvas = guided success.</div>
+                </div>
+
+                <!-- PIXELPOP Products -->
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">3D Display - Amalfi Coast</div>
+                            <div class="product-collection">Destination Series</div>
+                        </div>
+                        <div class="product-score">20/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$12.99-14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Specialty / TJX / Mass</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round (summer peak)</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Pre-assembled 3D standing</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Capri Bloom 3D proven ($957 rev). Amalfi = aspirational travel. Standing format = shelf appeal vs. flat.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Date Night Kit - Sunset Toast</div>
+                            <div class="product-collection">Social Moments</div>
+                        </div>
+                        <div class="product-score">17/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$19.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Valentine's + Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">2 coordinating 5x7" canvases</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Date Night Cosmic Crush ($684 on 72 units) proves concept. Duo format = social positioning. Gift-ready.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Girls Night Kit - Cocktail Hour</div>
+                            <div class="product-collection">Social Moments</div>
+                        </div>
+                        <div class="product-score">20/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$16.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">4-pack mini pixel canvases</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Girls Night 5 O'Clock ($957) validates theme. 4-pack = party positioning. Cocktail theme = adult-only.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Coasters - Mediterranean Tiles</div>
+                            <div class="product-collection">Destination Series</div>
+                        </div>
+                        <div class="product-score">18/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">TJX / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">4 coaster bases + gems</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Tiles of Grenada coasters ($2.04 COG) prove concept. Functional + decorative. Pixel art on functional object.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Reset - French Riviera</div>
+                            <div class="product-collection">Destination Series</div>
+                        </div>
+                        <div class="product-score">20/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$9.99-11.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Standard 8x10" pixel canvas</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Reset series = lowest COG ($1.87-1.97) with proven sell-through. Entry price point. Travel theme expansion.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Sticker Art - Mood Tracker</div>
+                            <div class="product-collection">Social Moments</div>
+                        </div>
+                        <div class="product-score">15/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$8.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / Specialty</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Back-to-school + Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">Journal pages + pixel stickers</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Sticker series ($1.19 COG) = high margin. Planner/journal adjacent. Functional use vs. purely decorative.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">3D Display - Winter Village</div>
+                            <div class="product-collection">Seasonal Moments</div>
+                        </div>
+                        <div class="product-score">20/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$14.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Mass / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Holiday (Oct-Dec)</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">3D standing winter scene</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Winter Wishes 3D ($1.62 COG) validates holiday format. Standing display = mantle/shelf display vs. flat ornament.</div>
+                </div>
+
+                <div class="product-card pixelpop" data-brand="pixelpop">
+                    <div class="product-header">
+                        <div>
+                            <div class="product-name">Gallery Frame - Botanical Trio</div>
+                            <div class="product-collection">Destination Series</div>
+                        </div>
+                        <div class="product-score">16/20</div>
+                    </div>
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">MSRP</span>
+                            <span class="detail-value">$22.99</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Channel</span>
+                            <span class="detail-value">Specialty / TJX</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Seasonality</span>
+                            <span class="detail-value">Year-round</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Format</span>
+                            <span class="detail-value">3 framed 4x6" pixel canvases</span>
+                        </div>
+                    </div>
+                    <div class="product-why">Frame-included = gift-ready. Botanical = proven (Floral Folly $162K). Multi-frame set unique in pixel art.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Do Not Pursue -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">3 Ideas to NOT Pursue</h2>
+            </div>
+            <div class="dont-pursue">
+                <div class="dont-pursue-item">
+                    <div class="dont-pursue-title">Character/Animal Crochet Kits (Woobles-style)</div>
+                    <div class="dont-pursue-reason">The Woobles owns this completely. $5M+ in sales, Shark Tank exposure, Walmart distribution. We can't out-cute them. Pivot to decor-first fiber instead.</div>
+                </div>
+                <div class="dont-pursue-item">
+                    <div class="dont-pursue-title">Flat Paint-by-Numbers (Generic Landscapes)</div>
+                    <div class="dont-pursue-reason">Market is saturated with $9.99 Amazon knockoffs. No differentiation possible. Our textured approach is the only path to premium positioning.</div>
+                </div>
+                <div class="dont-pursue-item">
+                    <div class="dont-pursue-title">Single-Use Party Favors or Disposable Plastic Decor</div>
+                    <div class="dont-pursue-reason">Violates brand exclusions. TJX is moving toward sustainability. HomeGoods 2026 trends emphasize "authentic materials." Don't chase dying formats.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Keywords to Monitor -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Keywords & Signals to Monitor</h2>
+            </div>
+            <div class="keywords-grid">
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"adult craft night"</div>
+                        <div class="keyword-platform">TikTok, Pinterest</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"textured canvas art"</div>
+                        <div class="keyword-platform">Instagram, Etsy</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"punch needle home decor"</div>
+                        <div class="keyword-platform">Pinterest, Amazon</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"diamond art display"</div>
+                        <div class="keyword-platform">TikTok, YouTube</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"DIY coasters"</div>
+                        <div class="keyword-platform">Pinterest, TikTok</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"Monet aesthetic"</div>
+                        <div class="keyword-platform">Instagram, Pinterest</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"couples craft date"</div>
+                        <div class="keyword-platform">TikTok, Pinterest</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"HomeGoods finds"</div>
+                        <div class="keyword-platform">TikTok, Instagram</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"off-price home decor"</div>
+                        <div class="keyword-platform">Instagram, Reddit</div>
+                    </div>
+                </div>
+                <div class="keyword-item">
+                    <div>
+                        <div class="keyword-term">"craft kit unboxing"</div>
+                        <div class="keyword-platform">YouTube, TikTok</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 24px; color: rgba(255,255,255,0.6); font-size: 0.85rem;">
+            HOP 2026 Product Roadmap | Generated January 2026 | Data-Driven. Adult-First. Retail-Ready.
+        </div>
+    </div>
+
+    <script>
+        // Revenue by Category Chart
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Balloon Centerpiece', 'Party Hero', 'Table Hero', 'MUDDIES', 'PIXELPOP'],
+                datasets: [{
+                    data: [900351, 743959, 249998, 162633, 109513],
+                    backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#E07B39', '#7B68EE'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'right' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': $' + context.raw.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Products by Brand Chart
+        new Chart(document.getElementById('productsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['THREADIES', 'MUDDIES', 'PIXELPOP'],
+                datasets: [{
+                    label: 'Products',
+                    data: [8, 8, 8],
+                    backgroundColor: ['#8B7355', '#E07B39', '#7B68EE'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 10 }
+                }
+            }
+        });
+
+        // MSRP Distribution Chart
+        new Chart(document.getElementById('msrpChart'), {
+            type: 'bar',
+            data: {
+                labels: ['$8-12', '$12-15', '$15-18', '$18-20', '$20-25'],
+                datasets: [
+                    {
+                        label: 'THREADIES',
+                        data: [0, 2, 3, 2, 1],
+                        backgroundColor: '#8B7355'
+                    },
+                    {
+                        label: 'MUDDIES',
+                        data: [0, 2, 2, 3, 1],
+                        backgroundColor: '#E07B39'
+                    },
+                    {
+                        label: 'PIXELPOP',
+                        data: [1, 3, 2, 1, 1],
+                        backgroundColor: '#7B68EE'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top' } },
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true }
+                }
+            }
+        });
+
+        // Channel Strategy Chart
+        new Chart(document.getElementById('channelChart'), {
+            type: 'radar',
+            data: {
+                labels: ['TJX Suitability', 'Mass Appeal', 'Specialty Fit', 'Gift Potential', 'Margin Confidence'],
+                datasets: [
+                    {
+                        label: 'THREADIES',
+                        data: [4.5, 3.5, 4.5, 4, 4],
+                        borderColor: '#8B7355',
+                        backgroundColor: 'rgba(139, 115, 85, 0.2)'
+                    },
+                    {
+                        label: 'MUDDIES',
+                        data: [4.5, 4.5, 4, 4.5, 4.5],
+                        borderColor: '#E07B39',
+                        backgroundColor: 'rgba(224, 123, 57, 0.2)'
+                    },
+                    {
+                        label: 'PIXELPOP',
+                        data: [4.5, 4.5, 4, 5, 4.5],
+                        borderColor: '#7B68EE',
+                        backgroundColor: 'rgba(123, 104, 238, 0.2)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5
+                    }
+                }
+            }
+        });
+
+        // Filter Products
+        function filterProducts(brand) {
+            const cards = document.querySelectorAll('.product-card');
+            const tabs = document.querySelectorAll('.tab');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('active-all', 'active-threadies', 'active-muddies', 'active-pixelpop');
+            });
+
+            if (brand === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+                event.target.classList.add('active-all');
+            } else {
+                cards.forEach(card => {
+                    if (card.dataset.brand === brand) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                event.target.classList.add('active-' + brand);
+            }
+        }
+    </script>
+</body>
+</html>

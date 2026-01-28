@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOUSE OF PARTY | 2026 Trend Strategy Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(236,72,153,0.15), rgba(59,130,246,0.15));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #fbbf24, #f472b6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .header .tagline {
+            color: #fbbf24;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .kpi-card .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .kpi-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .kpi-card .label {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-card.yellow .value { color: #fbbf24; }
+        .kpi-card.pink .value { color: #f472b6; }
+        .kpi-card.blue .value { color: #60a5fa; }
+        .kpi-card.green .value { color: #34d399; }
+        .kpi-card.orange .value { color: #fb923c; }
+        .kpi-card.purple .value { color: #a78bfa; }
+
+        /* Section styling */
+        .section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e2e8f0;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #fbbf24, #f472b6);
+            border-radius: 2px;
+        }
+
+        /* Charts grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .chart-container {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .chart-container h3 {
+            margin-bottom: 20px;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        /* Trend Cards */
+        .trends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .trend-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trend-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--trend-color);
+        }
+
+        .trend-card.t1 { --trend-color: #fbbf24; }
+        .trend-card.t2 { --trend-color: #f472b6; }
+        .trend-card.t3 { --trend-color: #60a5fa; }
+        .trend-card.t4 { --trend-color: #34d399; }
+        .trend-card.t5 { --trend-color: #fb923c; }
+        .trend-card.t6 { --trend-color: #a78bfa; }
+        .trend-card.t7 { --trend-color: #f87171; }
+
+        .trend-card .trend-num {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.1);
+        }
+
+        .trend-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--trend-color);
+        }
+
+        .trend-card p {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .trend-card .hop-opp {
+            margin-top: 12px;
+            padding: 10px;
+            background: rgba(251,191,36,0.1);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #fbbf24;
+            border-left: 3px solid #fbbf24;
+        }
+
+        /* Product Bet Cards */
+        .bets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .bet-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .bet-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .bet-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--bet-color), transparent);
+        }
+
+        .bet-card.b1 { --bet-color: #fbbf24; }
+        .bet-card.b2 { --bet-color: #f472b6; }
+        .bet-card.b3 { --bet-color: #60a5fa; }
+        .bet-card.b4 { --bet-color: #34d399; }
+        .bet-card.b5 { --bet-color: #a78bfa; }
+
+        .bet-card .rank-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            background: var(--bet-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0f172a;
+        }
+
+        .bet-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .bet-card .category {
+            color: var(--bet-color);
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bet-card .products {
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .bet-card .products h5 {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .bet-card .products ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .bet-card .products li {
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .bet-card .products li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--bet-color);
+        }
+
+        .bet-card .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .bet-card .metric {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+
+        .bet-card .metric-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--bet-color);
+        }
+
+        .bet-card .metric-label {
+            font-size: 0.65rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .bet-card .why {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            padding: 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--bet-color);
+        }
+
+        /* Ignore Cards */
+        .ignore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .ignore-card {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .ignore-card h5 {
+            color: #f87171;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ignore-card h5::before {
+            content: '✕';
+            background: #ef4444;
+            color: #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .ignore-card p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .timeline-phase {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .timeline-phase h4 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timeline-phase.q1 h4 { color: #34d399; }
+        .timeline-phase.q2 h4 { color: #60a5fa; }
+
+        .timeline-phase ul {
+            list-style: none;
+        }
+
+        .timeline-phase li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            border-left: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .timeline-phase li::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--phase-color);
+        }
+
+        .timeline-phase.q1 li::before { background: #34d399; }
+        .timeline-phase.q2 li::before { background: #60a5fa; }
+
+        /* Retailer Matrix */
+        .retailer-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .matrix-header {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .matrix-cell {
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .matrix-cell.product {
+            text-align: left;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .matrix-cell .check {
+            color: #34d399;
+            font-size: 1.2rem;
+        }
+
+        .matrix-cell .partial {
+            color: #fbbf24;
+            font-size: 0.75rem;
+        }
+
+        /* Brand fit bars */
+        .brand-fit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-fit-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .brand-fit-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f472b6);
+        }
+
+        .brand-fit-score {
+            font-size: 0.8rem;
+            color: #fbbf24;
+            font-weight: 600;
+            min-width: 35px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .timeline { grid-template-columns: 1fr; }
+            .bets-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>HOUSE OF PARTY</h1>
+        <div class="subtitle">2026 Retail Trend & Product Strategy Dashboard</div>
+        <div class="tagline">"Confidence, creativity, and ease — not just decor"</div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card yellow">
+            <div class="icon">📈</div>
+            <div class="value">$35B</div>
+            <div class="label">Party Market 2035</div>
+        </div>
+        <div class="kpi-card pink">
+            <div class="icon">📱</div>
+            <div class="value">18%</div>
+            <div class="label">Social-Driven Purchases</div>
+        </div>
+        <div class="kpi-card blue">
+            <div class="icon">🎯</div>
+            <div class="value">7</div>
+            <div class="label">Key Trends Identified</div>
+        </div>
+        <div class="kpi-card green">
+            <div class="icon">💡</div>
+            <div class="value">5</div>
+            <div class="label">High-Confidence Bets</div>
+        </div>
+        <div class="kpi-card orange">
+            <div class="icon">🏪</div>
+            <div class="value">130+</div>
+            <div class="label">TJX New Stores 2026</div>
+        </div>
+        <div class="kpi-card purple">
+            <div class="icon">🚫</div>
+            <div class="value">6</div>
+            <div class="label">Trends to Avoid</div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>Brand Fit vs Launch Complexity</h3>
+            <canvas id="bubbleChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Retailer Fit by Product Bet</h3>
+            <canvas id="retailerChart"></canvas>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>Trend Strength Radar</h3>
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Seasonality Mix</h3>
+            <canvas id="seasonChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 2026 Trends -->
+    <div class="section">
+        <div class="section-title">2026 Trend Summary</div>
+        <div class="trends-grid">
+            <div class="trend-card t1">
+                <div class="trend-num">01</div>
+                <h4>HIGH-LOW ENTERTAINING</h4>
+                <p>Casual formats (BBQs, book clubs) paired with elevated execution. "Refinement without stiffness" is the new hosting standard.</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Table Hero kits delivering "elevated casual" in one box</div>
+            </div>
+            <div class="trend-card t2">
+                <div class="trend-num">02</div>
+                <h4>MICRO-GATHERINGS</h4>
+                <p>Smaller, intentional gatherings. Screen-free activities. "Active participation" over passive observation. The "quiet revolution."</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Craft-party hybrids where activity IS entertainment</div>
+            </div>
+            <div class="trend-card t3">
+                <div class="trend-num">03</div>
+                <h4>GRANDMA CRAFTS REVIVAL</h4>
+                <p>Embroidery, cross-stitch, weaving back via Gen Z's "hot girls do grandma crafts" movement. Mini looms in dorm rooms.</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Threadies expansion into beginner fiber crafts</div>
+            </div>
+            <div class="trend-card t4">
+                <div class="trend-num">04</div>
+                <h4>DOPAMINE DECOR</h4>
+                <p>Bold, mood-boosting colors. Bubblegum pink, citrus yellow, pistachio green. Candy stripes. Happy maximalism.</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Bold colorways across all categories</div>
+            </div>
+            <div class="trend-card t5">
+                <div class="trend-num">05</div>
+                <h4>INTERACTIVE EXPERIENCE PARTIES</h4>
+                <p>Activity-driven kid parties: dig for fossils, solve mysteries, create crafts. "Movement, not just posing."</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Party kits where activity IS the takeaway</div>
+            </div>
+            <div class="trend-card t6">
+                <div class="trend-num">06</div>
+                <h4>EVERYDAY CELEBRATIONS</h4>
+                <p>Beyond milestones. Wednesday wine nights. "Just because" gatherings. Laid-back acts of devotion.</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Non-occasion product lines. Reusable, restyable decor</div>
+            </div>
+            <div class="trend-card t7">
+                <div class="trend-num">07</div>
+                <h4>SUSTAINABLE SUPPLIES</h4>
+                <p>Eco-friendly becoming standard. Recyclable, compostable, biodegradable. FSC paper. Regulatory pressure accelerating.</p>
+                <div class="hop-opp"><strong>HOP Play:</strong> Sustainability built-in, not add-on</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- High-Confidence Bets -->
+    <div class="section">
+        <div class="section-title">Top 5 High-Confidence Product Bets</div>
+        <div class="bets-grid">
+            <!-- Bet 1 -->
+            <div class="bet-card b1">
+                <div class="rank-badge">1</div>
+                <h4>CRAFT-PARTY KITS</h4>
+                <div class="category">Muddies / Threadies / PixelPop</div>
+                <div class="products">
+                    <h5>Specific Products</h5>
+                    <ul>
+                        <li>"Make & Celebrate" paint-your-own ceramics pack</li>
+                        <li>"Friendship Bracelet Bar" beading station + decor</li>
+                        <li>"Pixel Party" diamond art placemats</li>
+                    </ul>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value">TARGET</div>
+                        <div class="metric-label">Retailer</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">5/5</div>
+                        <div class="metric-label">Brand Fit</div>
+                    </div>
+                </div>
+                <div class="why">Activity IS the party + takeaway. Every guest leaves with something they made. Differentiates from commodity decor.</div>
+            </div>
+
+            <!-- Bet 2 -->
+            <div class="bet-card b2">
+                <div class="rank-badge">2</div>
+                <h4>TABLE HERO EVERYDAY</h4>
+                <div class="category">Table Hero Extension</div>
+                <div class="products">
+                    <h5>Specific Products</h5>
+                    <ul>
+                        <li>"Weeknight Win" cloth runner + napkins + candle kit</li>
+                        <li>"Brunch Mode" placemats + cocktail napkins bundle</li>
+                        <li>"Girls Night In" wine charms + coasters + cards</li>
+                    </ul>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value">BOTH</div>
+                        <div class="metric-label">Retailer</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">4/5</div>
+                        <div class="metric-label">Brand Fit</div>
+                    </div>
+                </div>
+                <div class="why">Extends HOP beyond "party" into "gathering." Higher margin cloth vs. paper. Builds loyalty through repeated use.</div>
+            </div>
+
+            <!-- Bet 3 -->
+            <div class="bet-card b3">
+                <div class="rank-badge">3</div>
+                <h4>DOPAMINE COLORWAYS</h4>
+                <div class="category">All Categories</div>
+                <div class="products">
+                    <h5>Specific Products</h5>
+                    <ul>
+                        <li>"Sugar Rush" — hot pink, electric orange, lime</li>
+                        <li>"Citrus Pop" — lemon yellow, tangerine, grapefruit</li>
+                        <li>"Brat Party" — Charli XCX lime + black + silver</li>
+                    </ul>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value">BOTH</div>
+                        <div class="metric-label">Retailer</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Hybrid</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">5/5</div>
+                        <div class="metric-label">Brand Fit</div>
+                    </div>
+                </div>
+                <div class="why">Lowest execution complexity. Immediate social content. Signals "HOP is current" to trend-aware shopper.</div>
+            </div>
+
+            <!-- Bet 4 -->
+            <div class="bet-card b4">
+                <div class="rank-badge">4</div>
+                <h4>INTERACTIVE KIDS KITS</h4>
+                <div class="category">Party Hero Evolution</div>
+                <div class="products">
+                    <h5>Specific Products</h5>
+                    <ul>
+                        <li>"Dino Dig" excavation mat + tools + fossil capsules</li>
+                        <li>"Detective Club" mystery clues + magnifying glasses</li>
+                        <li>"Make It Mini" tiny baking/crafting activity kit</li>
+                    </ul>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value">TARGET</div>
+                        <div class="metric-label">Retailer</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">5/5</div>
+                        <div class="metric-label">Brand Fit</div>
+                    </div>
+                </div>
+                <div class="why">Solves #1 parent pain point: "What do we DO?" High perceived value = premium pricing. Instagram/TikTok goldmine.</div>
+            </div>
+
+            <!-- Bet 5 -->
+            <div class="bet-card b5">
+                <div class="rank-badge">5</div>
+                <h4>GATHER REUSABLE SYSTEM</h4>
+                <div class="category">New Sub-Brand</div>
+                <div class="products">
+                    <h5>Specific Products</h5>
+                    <ul>
+                        <li>"Gather" Arch Kit — frame + seasonal balloon refills</li>
+                        <li>"Gather" Banner System — Scrabble-style letter tiles</li>
+                        <li>"Gather" Backdrop Panels — interlocking modular panels</li>
+                    </ul>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value">TARGET</div>
+                        <div class="metric-label">Retailer</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">4/5</div>
+                        <div class="metric-label">Brand Fit</div>
+                    </div>
+                </div>
+                <div class="why">Sustainability without sacrifice. Higher LTV through refills/add-ons. Differentiated from single-use competitors.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Retailer Strategy Matrix -->
+    <div class="section">
+        <div class="section-title">Retailer Fit Matrix</div>
+        <div class="retailer-matrix">
+            <div class="matrix-header">Product Bet</div>
+            <div class="matrix-header">Target</div>
+            <div class="matrix-header">TJX</div>
+
+            <div class="matrix-cell product">Craft-Party Kits</div>
+            <div class="matrix-cell"><span class="check">✓</span> Primary</div>
+            <div class="matrix-cell"><span class="partial">Components only</span></div>
+
+            <div class="matrix-cell product">Table Hero Everyday</div>
+            <div class="matrix-cell"><span class="check">✓</span> Year-round</div>
+            <div class="matrix-cell"><span class="check">✓</span> HomeGoods impulse</div>
+
+            <div class="matrix-cell product">Dopamine Colorways</div>
+            <div class="matrix-cell"><span class="check">✓</span> Planned purchase</div>
+            <div class="matrix-cell"><span class="check">✓</span> Treasure hunt</div>
+
+            <div class="matrix-cell product">Interactive Kids Kits</div>
+            <div class="matrix-cell"><span class="check">✓</span> Party aisle</div>
+            <div class="matrix-cell"><span class="partial">Seasonal only</span></div>
+
+            <div class="matrix-cell product">Gather Reusable System</div>
+            <div class="matrix-cell"><span class="check">✓</span> Test launch</div>
+            <div class="matrix-cell"><span class="partial">Refill packs only</span></div>
+        </div>
+    </div>
+
+    <!-- Trends to Ignore -->
+    <div class="section">
+        <div class="section-title">Trends to IGNORE</div>
+        <div class="ignore-grid">
+            <div class="ignore-card">
+                <h5>Licensed Character Dependency</h5>
+                <p>Margin compression from fees. Renting someone else's equity. One bad movie = stranded inventory. Build ownable aesthetics instead.</p>
+            </div>
+            <div class="ignore-card">
+                <h5>LED/Digital-Enhanced Decor</h5>
+                <p>High unit cost, low margin. Reliability/returns issues. Doesn't fit TJX price thresholds. Battery disposal contradicts sustainability.</p>
+            </div>
+            <div class="ignore-card">
+                <h5>Ultra-Premium Chateaucore</h5>
+                <p>Doesn't scale to mass price points. Niche Pinterest aesthetic. Execution cost prohibitive for paper goods. Own "elevated casual" instead.</p>
+            </div>
+            <div class="ignore-card">
+                <h5>Micro-Wedding Supplies</h5>
+                <p>Different buyer, different channel. Extremely seasonal. One-time purchase, no velocity. Target/TJX not wedding destinations.</p>
+            </div>
+            <div class="ignore-card">
+                <h5>Slime/Sensory Overload Kits</h5>
+                <p>Market saturated, commoditized. Cleanup/mess perception = barrier. Returns high. Muddies should be result-oriented, not "just mess."</p>
+            </div>
+            <div class="ignore-card">
+                <h5>Single-Use Plastic Novelty</h5>
+                <p>Regulatory pressure accelerating. Brand risk with eco-conscious consumers. Target curating away from it. Doesn't differentiate.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Execution Timeline -->
+    <div class="section">
+        <div class="section-title">Execution Timeline</div>
+        <div class="timeline">
+            <div class="timeline-phase q1">
+                <h4>🚀 Q1-Q2 2026: Quick Wins</h4>
+                <ul>
+                    <li>Dopamine colorway launch across existing SKUs</li>
+                    <li>Threadies "Friendship Bracelet Bar" for spring/summer</li>
+                    <li>Table Hero "Brunch Mode" for Mother's Day</li>
+                </ul>
+            </div>
+            <div class="timeline-phase q2">
+                <h4>🔧 Q3-Q4 2026: Strategic Builds</h4>
+                <ul>
+                    <li>"Dino Dig" Interactive Kit for holiday gifting</li>
+                    <li>"Gather" Reusable System soft launch (test market)</li>
+                    <li>Muddies "Paint Party" Kit expansion</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Fit Summary -->
+    <div class="section">
+        <div class="section-title">Brand Fit Scores</div>
+        <div style="display: grid; gap: 12px; max-width: 600px;">
+            <div style="display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 12px;">
+                <span style="color: #e2e8f0; font-size: 0.9rem;">Craft-Party Kits</span>
+                <div class="brand-fit-bar"><div class="fill" style="width: 100%;"></div></div>
+                <span class="brand-fit-score">5/5</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 12px;">
+                <span style="color: #e2e8f0; font-size: 0.9rem;">Table Hero Everyday</span>
+                <div class="brand-fit-bar"><div class="fill" style="width: 80%;"></div></div>
+                <span class="brand-fit-score">4/5</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 12px;">
+                <span style="color: #e2e8f0; font-size: 0.9rem;">Dopamine Colorways</span>
+                <div class="brand-fit-bar"><div class="fill" style="width: 100%;"></div></div>
+                <span class="brand-fit-score">5/5</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 12px;">
+                <span style="color: #e2e8f0; font-size: 0.9rem;">Interactive Kids Kits</span>
+                <div class="brand-fit-bar"><div class="fill" style="width: 100%;"></div></div>
+                <span class="brand-fit-score">5/5</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 12px;">
+                <span style="color: #e2e8f0; font-size: 0.9rem;">Gather Reusable</span>
+                <div class="brand-fit-bar"><div class="fill" style="width: 80%;"></div></div>
+                <span class="brand-fit-score">4/5</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>HOUSE OF PARTY | 2026 Trend Strategy Dashboard | Generated by Claude Code</p>
+        <p style="margin-top:8px;">Data: Fortune Business Insights, Veranda, Homes & Gardens, Meri Meri, TrendHunter, Glimpse, BizBash, TJX Financial Reports</p>
+    </div>
+
+    <script>
+        // Colors
+        const colors = {
+            yellow: '#fbbf24',
+            pink: '#f472b6',
+            blue: '#60a5fa',
+            green: '#34d399',
+            purple: '#a78bfa',
+            orange: '#fb923c',
+            red: '#f87171'
+        };
+
+        // Bubble Chart - Brand Fit vs Complexity
+        const bubbleCtx = document.getElementById('bubbleChart').getContext('2d');
+        new Chart(bubbleCtx, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Product Bets',
+                    data: [
+                        { x: 3.5, y: 5, r: 22, label: 'Craft-Party Kits' },
+                        { x: 2.5, y: 4, r: 18, label: 'Table Hero Everyday' },
+                        { x: 1.5, y: 5, r: 20, label: 'Dopamine Colorways' },
+                        { x: 3, y: 5, r: 19, label: 'Interactive Kids' },
+                        { x: 4, y: 4, r: 16, label: 'Gather System' }
+                    ],
+                    backgroundColor: [
+                        'rgba(251,191,36,0.6)',
+                        'rgba(244,114,182,0.6)',
+                        'rgba(96,165,250,0.6)',
+                        'rgba(52,211,153,0.6)',
+                        'rgba(167,139,250,0.6)'
+                    ],
+                    borderColor: [
+                        colors.yellow,
+                        colors.pink,
+                        colors.blue,
+                        colors.green,
+                        colors.purple
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => {
+                                const labels = ['Craft-Party Kits', 'Table Hero Everyday', 'Dopamine Colorways', 'Interactive Kids', 'Gather System'];
+                                return `${labels[ctx.dataIndex]}: Complexity ${ctx.raw.x}/5, Brand Fit ${ctx.raw.y}/5`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Launch Complexity', color: '#94a3b8' },
+                        min: 0, max: 5,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Brand Fit Score', color: '#94a3b8' },
+                        min: 0, max: 5.5,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // Retailer Fit Chart
+        const retailerCtx = document.getElementById('retailerChart').getContext('2d');
+        new Chart(retailerCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Craft-Party', 'Table Hero', 'Dopamine', 'Kids Kits', 'Gather'],
+                datasets: [
+                    {
+                        label: 'Target',
+                        data: [100, 80, 90, 100, 85],
+                        backgroundColor: 'rgba(251,191,36,0.7)',
+                        borderColor: colors.yellow,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'TJX',
+                        data: [30, 70, 85, 40, 35],
+                        backgroundColor: 'rgba(244,114,182,0.7)',
+                        borderColor: colors.pink,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: '#e2e8f0', padding: 15 }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 10 } }
+                    },
+                    y: {
+                        title: { display: true, text: 'Fit Score %', color: '#94a3b8' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' },
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Radar Chart - Trend Strength
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['High-Low Entertaining', 'Micro-Gatherings', 'Grandma Crafts', 'Dopamine Decor', 'Interactive Parties', 'Everyday Celebrations', 'Sustainability'],
+                datasets: [{
+                    label: 'Trend Strength',
+                    data: [85, 80, 75, 90, 88, 82, 78],
+                    backgroundColor: 'rgba(251,191,36,0.2)',
+                    borderColor: colors.yellow,
+                    borderWidth: 2,
+                    pointBackgroundColor: colors.yellow,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }, {
+                    label: 'HOP Opportunity',
+                    data: [80, 85, 70, 95, 90, 75, 65],
+                    backgroundColor: 'rgba(244,114,182,0.2)',
+                    borderColor: colors.pink,
+                    borderWidth: 2,
+                    pointBackgroundColor: colors.pink,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: '#e2e8f0' }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        angleLines: { color: 'rgba(255,255,255,0.1)' },
+                        pointLabels: { color: '#e2e8f0', font: { size: 9 } },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Seasonality Chart
+        const seasonCtx = document.getElementById('seasonChart').getContext('2d');
+        new Chart(seasonCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Year-Round', 'Seasonal', 'Hybrid'],
+                datasets: [{
+                    data: [60, 20, 20],
+                    backgroundColor: [
+                        'rgba(52,211,153,0.8)',
+                        'rgba(251,191,36,0.8)',
+                        'rgba(96,165,250,0.8)'
+                    ],
+                    borderColor: '#0f172a',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#e2e8f0', padding: 15 }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Product Bet Seasonality Mix',
+                        color: '#94a3b8',
+                        font: { size: 12 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOUSE OF PARTY | Product Strategy 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(236,72,153,0.1), rgba(99,102,241,0.1));
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f472b6, #6366f1);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #fbbf24, #f472b6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: 3px;
+            font-weight: 800;
+        }
+
+        .header .subtitle {
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .header .tagline {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .header .brand-pillars {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pillar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .pillar .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .pillar.adult .dot { background: #fbbf24; }
+        .pillar.social .dot { background: #f472b6; }
+        .pillar.scalable .dot { background: #6366f1; }
+
+        /* Strategy Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-tag.must {
+            background: rgba(34,197,94,0.2);
+            border: 1px solid rgba(34,197,94,0.4);
+            color: #22c55e;
+        }
+
+        .filter-tag.never {
+            background: rgba(239,68,68,0.2);
+            border: 1px solid rgba(239,68,68,0.4);
+            color: #ef4444;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .kpi-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .kpi-card .label {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-card.gold .value { color: #fbbf24; }
+        .kpi-card.pink .value { color: #f472b6; }
+        .kpi-card.indigo .value { color: #6366f1; }
+        .kpi-card.emerald .value { color: #10b981; }
+        .kpi-card.orange .value { color: #f97316; }
+
+        /* Section styling */
+        .section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e2e8f0;
+        }
+
+        .section-title .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .section-title .icon.gold { background: rgba(251,191,36,0.2); }
+        .section-title .icon.pink { background: rgba(244,114,182,0.2); }
+        .section-title .icon.indigo { background: rgba(99,102,241,0.2); }
+        .section-title .icon.emerald { background: rgba(16,185,129,0.2); }
+        .section-title .icon.red { background: rgba(239,68,68,0.2); }
+
+        /* Charts grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .chart-container {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .chart-container h3 {
+            margin-bottom: 20px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Product Bet Cards */
+        .bets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+        }
+
+        .bet-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .bet-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--bet-color);
+        }
+
+        .bet-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bet-color);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .bet-card.b1 { --bet-color: #fbbf24; }
+        .bet-card.b2 { --bet-color: #f472b6; }
+        .bet-card.b3 { --bet-color: #6366f1; }
+        .bet-card.b4 { --bet-color: #10b981; }
+        .bet-card.b5 { --bet-color: #f97316; }
+
+        .bet-card .rank {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: var(--bet-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #0c0c0c;
+        }
+
+        .bet-card .brand-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .bet-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .bet-card .category {
+            color: var(--bet-color);
+            font-size: 0.8rem;
+            margin-bottom: 16px;
+        }
+
+        .bet-card .products-list {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .bet-card .products-list h5 {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .bet-card .products-list ul {
+            list-style: none;
+        }
+
+        .bet-card .products-list li {
+            padding: 5px 0;
+            padding-left: 18px;
+            position: relative;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .bet-card .products-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--bet-color);
+        }
+
+        .bet-card .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .bet-card .metric {
+            text-align: center;
+            padding: 10px 6px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+
+        .bet-card .metric-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--bet-color);
+        }
+
+        .bet-card .metric-label {
+            font-size: 0.6rem;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .bet-card .differentiator {
+            padding: 12px;
+            background: rgba(var(--bet-color-rgb), 0.1);
+            border-left: 3px solid var(--bet-color);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .bet-card.b1 .differentiator { background: rgba(251,191,36,0.1); }
+        .bet-card.b2 .differentiator { background: rgba(244,114,182,0.1); }
+        .bet-card.b3 .differentiator { background: rgba(99,102,241,0.1); }
+        .bet-card.b4 .differentiator { background: rgba(16,185,129,0.1); }
+        .bet-card.b5 .differentiator { background: rgba(249,115,22,0.1); }
+
+        /* Channel Strategy */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .channel-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            text-align: center;
+        }
+
+        .channel-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .channel-card.tjx h4 { color: #fbbf24; }
+        .channel-card.mass h4 { color: #f472b6; }
+        .channel-card.specialty h4 { color: #6366f1; }
+
+        .channel-card .price {
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        .channel-card .focus {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .channel-card .products {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* Category Expansion Cards */
+        .expansion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .expansion-card {
+            background: linear-gradient(145deg, rgba(16,185,129,0.1), rgba(16,185,129,0.02));
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .expansion-card h5 {
+            color: #10b981;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expansion-card p {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .expansion-card .opportunities {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .expansion-card .opportunities strong {
+            color: #10b981;
+        }
+
+        /* Ignore Cards */
+        .ignore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .ignore-card {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .ignore-card h5 {
+            color: #f87171;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ignore-card h5::before {
+            content: '✕';
+            background: #ef4444;
+            color: #fff;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+        }
+
+        .ignore-card p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* Sub-brands */
+        .subbrands {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .subbrand {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .subbrand h5 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .subbrand.pixel h5 { color: #fbbf24; }
+        .subbrand.threadies h5 { color: #f472b6; }
+        .subbrand.muddies h5 { color: #6366f1; }
+
+        .subbrand p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Keywords */
+        .keywords-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .keyword-tag {
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(244,114,182,0.2));
+            border: 1px solid rgba(99,102,241,0.3);
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .keyword-tag .pulse {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Decision Filter */
+        .decision-filter {
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .decision-filter h4 {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .decision-filter ol {
+            list-style: none;
+            counter-reset: filter;
+        }
+
+        .decision-filter li {
+            counter-increment: filter;
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .decision-filter li::before {
+            content: counter(filter);
+            position: absolute;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background: rgba(251,191,36,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .bets-grid { grid-template-columns: 1fr; }
+            .channel-grid { grid-template-columns: 1fr; }
+            .subbrands { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>HOUSE OF PARTY</h1>
+        <div class="subtitle">2026 Product Strategy Dashboard</div>
+        <div class="tagline">Adult-First · Social-Driven · Retail-Scalable</div>
+        <div class="brand-pillars">
+            <div class="pillar adult"><div class="dot"></div>Confidence</div>
+            <div class="pillar social"><div class="dot"></div>Creativity</div>
+            <div class="pillar scalable"><div class="dot"></div>Ease</div>
+        </div>
+    </div>
+
+    <!-- Strategy Filters -->
+    <div class="filters">
+        <div class="filter-tag must">✓ Adult-first positioning</div>
+        <div class="filter-tag must">✓ TJX scalable</div>
+        <div class="filter-tag must">✓ System/modular logic</div>
+        <div class="filter-tag never">✕ No kids-only</div>
+        <div class="filter-tag never">✕ No licensed IP</div>
+        <div class="filter-tag never">✕ No single-use plastic</div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="value">5</div>
+            <div class="label">Product Bets</div>
+        </div>
+        <div class="kpi-card pink">
+            <div class="value">3</div>
+            <div class="label">Category Expansions</div>
+        </div>
+        <div class="kpi-card indigo">
+            <div class="value">3</div>
+            <div class="label">Channels</div>
+        </div>
+        <div class="kpi-card emerald">
+            <div class="value">100%</div>
+            <div class="label">Year-Round Focus</div>
+        </div>
+        <div class="kpi-card orange">
+            <div class="value">$9.99-$34.99</div>
+            <div class="label">MSRP Range</div>
+        </div>
+    </div>
+
+    <!-- Sub-brands -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon gold">🎨</div>
+            Sub-Brand Positioning
+        </div>
+        <div class="subbrands">
+            <div class="subbrand pixel">
+                <h5>PIXELPOP</h5>
+                <p>Visual, dopamine-driven craft<br>Functional output focus</p>
+            </div>
+            <div class="subbrand threadies">
+                <h5>THREADIES</h5>
+                <p>Soft, calming fiber craft<br>Meditative process</p>
+            </div>
+            <div class="subbrand muddies">
+                <h5>MUDDIES</h5>
+                <p>Tactile, paint-based creativity<br>Result-oriented</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>Channel Fit by Product Bet</h3>
+            <canvas id="channelChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>MSRP Range by Product</h3>
+            <canvas id="priceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>Competitive Whitespace</h3>
+            <canvas id="whiteSpaceChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>System vs Single-Use Strategy</h3>
+            <canvas id="systemChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Top 5 Product Bets -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon gold">💡</div>
+            Top 5 Product Bets
+        </div>
+        <div class="bets-grid">
+            <!-- Bet 1 -->
+            <div class="bet-card b1">
+                <div class="rank">1</div>
+                <div class="brand-tag">Party Decor System</div>
+                <h4>GATHER Arch System</h4>
+                <div class="category">Modular Balloon Architecture</div>
+                <div class="products-list">
+                    <h5>SKU Architecture</h5>
+                    <ul>
+                        <li>Reusable frame kit ($24.99-$29.99)</li>
+                        <li>Seasonal refill packs ($9.99-$14.99)</li>
+                        <li>Core neutrals: white, sage, terracotta</li>
+                        <li>Seasonal drops: pastels, brights, metallics</li>
+                    </ul>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-value">TJX + Mass</div>
+                        <div class="metric-label">Channels</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$9.99-$29.99</div>
+                        <div class="metric-label">MSRP</div>
+                    </div>
+                </div>
+                <div class="differentiator"><strong>Whitespace:</strong> First modular balloon arch at mass/off-price. Buy once, refill seasonally. Creates velocity, not one-time purchase.</div>
+            </div>
+
+            <!-- Bet 2 -->
+            <div class="bet-card b2">
+                <div class="rank">2</div>
+                <div class="brand-tag">Table Hybrid</div>
+                <h4>HOSTESS HERO Table Kits</h4>
+                <div class="category">Complete Table Solutions</div>
+                <div class="products-list">
+                    <h5>SKU Architecture</h5>
+                    <ul>
+                        <li>"Dinner Party" — elegant neutral</li>
+                        <li>"Brunch Club" — bright citrus</li>
+                        <li>"Wine Night" — moody burgundy/gold</li>
+                        <li>"Game Day" — bold graphic</li>
+                    </ul>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-value">TJX HomeGoods</div>
+                        <div class="metric-label">Primary</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$19.99-$24.99</div>
+                        <div class="metric-label">MSRP</div>
+                    </div>
+                </div>
+                <div class="differentiator"><strong>Whitespace:</strong> High-low in one box. Cloth (reusable) + paper (consumable). Perceived premium at accessible price.</div>
+            </div>
+
+            <!-- Bet 3 -->
+            <div class="bet-card b3">
+                <div class="rank">3</div>
+                <div class="brand-tag">PixelPop</div>
+                <h4>Functional Craft Kits</h4>
+                <div class="category">Diamond Art with Purpose</div>
+                <div class="products-list">
+                    <h5>SKU Architecture</h5>
+                    <ul>
+                        <li>Coaster Sets (4-pack) — $14.99-$16.99</li>
+                        <li>Catch-All Trays — $12.99-$14.99</li>
+                        <li>Ornament Kits (seasonal) — $9.99-$12.99</li>
+                        <li>Wall Art Tiles (modular) — $19.99-$24.99</li>
+                    </ul>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-value">TJX + Mass</div>
+                        <div class="metric-label">Channels</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$9.99-$24.99</div>
+                        <div class="metric-label">MSRP</div>
+                    </div>
+                </div>
+                <div class="differentiator"><strong>Whitespace:</strong> Functional output, not decorative. Adult actually USES the result. Coasters, trays, not wall art collecting dust.</div>
+            </div>
+
+            <!-- Bet 4 -->
+            <div class="bet-card b4">
+                <div class="rank">4</div>
+                <div class="brand-tag">Party Decor System</div>
+                <h4>SAY IT Letter Tiles</h4>
+                <div class="category">Reusable Message System</div>
+                <div class="products-list">
+                    <h5>SKU Architecture</h5>
+                    <ul>
+                        <li>Starter Set (100+ tiles) — $19.99-$24.99</li>
+                        <li>Expansion Packs themed — $9.99-$12.99</li>
+                        <li>Display Rail (wall/table) — $14.99-$19.99</li>
+                        <li>Seasonal: "BOO" "NOEL" "XOXO"</li>
+                    </ul>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-value">All Channels</div>
+                        <div class="metric-label">Distribution</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$9.99-$24.99</div>
+                        <div class="metric-label">MSRP</div>
+                    </div>
+                </div>
+                <div class="differentiator"><strong>Whitespace:</strong> Spell ANYTHING. Infinite occasions, zero waste. Replaces single-use banners entirely.</div>
+            </div>
+
+            <!-- Bet 5 -->
+            <div class="bet-card b5">
+                <div class="rank">5</div>
+                <div class="brand-tag">Threadies</div>
+                <h4>Punch Needle Collection</h4>
+                <div class="category">Calming Fiber Craft</div>
+                <div class="products-list">
+                    <h5>SKU Architecture</h5>
+                    <ul>
+                        <li>Coaster Kit (4-pack) — $16.99-$19.99</li>
+                        <li>Trivet Kit — $14.99-$16.99</li>
+                        <li>Mini Wall Hanging — $19.99-$24.99</li>
+                        <li>Pillow Cover (advanced) — $29.99-$34.99</li>
+                    </ul>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-value">TJX + Specialty</div>
+                        <div class="metric-label">Channels</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">Year-Round</div>
+                        <div class="metric-label">Seasonality</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$14.99-$34.99</div>
+                        <div class="metric-label">MSRP</div>
+                    </div>
+                </div>
+                <div class="differentiator"><strong>Whitespace:</strong> "Grandma crafts" revival, adult entry point. The Woobles is crochet at $30+. Punch needle = faster, cheaper, trending.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Channel Strategy -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon pink">🏪</div>
+            Channel Strategy
+        </div>
+        <div class="channel-grid">
+            <div class="channel-card tjx">
+                <h4>TJX / Off-Price</h4>
+                <div class="price">$9.99 - $24.99</div>
+                <div class="focus">Treasure hunt impulse. System components sold separately. Craft/gift positioning.</div>
+                <div class="products">Arch refills · Letter tiles · PixelPop kits · Threadies starters</div>
+            </div>
+            <div class="channel-card mass">
+                <h4>Mass (Target)</h4>
+                <div class="price">$14.99 - $29.99</div>
+                <div class="focus">Full systems. Planned purchase. Planogram anchor. Complete solutions.</div>
+                <div class="products">Complete Arch System · Hostess Hero kits · SAY IT full sets</div>
+            </div>
+            <div class="channel-card specialty">
+                <h4>Specialty / Gift</h4>
+                <div class="price">$24.99 - $49.99</div>
+                <div class="focus">Premium bundles. Hostess gifting. Design-forward curation.</div>
+                <div class="products">Elevated Table Kits · Advanced Threadies · Curated bundles</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Expansions -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon emerald">📈</div>
+            Category Expansions to Pursue
+        </div>
+        <div class="expansion-grid">
+            <div class="expansion-card">
+                <h5>🍷 Adult Social Craft</h5>
+                <p>Craft activities designed for adult gatherings—not solo, not kids. "The activity IS the party." Wine + paint nights proved the model; at-home version underserved.</p>
+                <div class="opportunities"><strong>Opportunities:</strong> Paint-your-own glassware, pottery painting sets, candle-making party kits, terrarium building</div>
+            </div>
+            <div class="expansion-card">
+                <h5>🏠 Everyday Hosting</h5>
+                <p>Products for non-milestone gatherings. Wednesday wine night. Sunday brunch. Book club. Current party aisle is birthday/holiday dominated.</p>
+                <div class="opportunities"><strong>Opportunities:</strong> "Tuesday Night" table kits, cocktail hour accessories, outdoor entertaining, conversation starters</div>
+            </div>
+            <div class="expansion-card">
+                <h5>✨ Home Decor Crossover</h5>
+                <p>Products that live in the home year-round but serve party function. Blur decor and celebration. Unlocks TJX HomeGoods real estate.</p>
+                <div class="opportunities"><strong>Opportunities:</strong> Modular shelf displays, design-forward serving ware, entertaining vessels, decorative trays</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trends to Ignore -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon red">🚫</div>
+            Trends to IGNORE
+        </div>
+        <div class="ignore-grid">
+            <div class="ignore-card">
+                <h5>Kids' Experience Party Kits</h5>
+                <p>Violates adult-first positioning. Competes at commodity price. TJX party section isn't kids' destination. Confuses brand in buyer's mind.</p>
+            </div>
+            <div class="ignore-card">
+                <h5>Licensed Character Extensions</h5>
+                <p>Margin destruction from fees. Renting equity, not building it. One bad movie = stranded inventory. HOP's value is original design.</p>
+            </div>
+            <div class="ignore-card">
+                <h5>Single-Use Themed Tableware</h5>
+                <p>Commodity race to bottom. Sustainability backlash. No brand loyalty. TJX won't carry (no treasure hunt value). Amazon/dollar store dominates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decision Filter -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon gold">✓</div>
+            Product Decision Filter
+        </div>
+        <div class="decision-filter">
+            <h4>Before greenlighting ANY product, ask:</h4>
+            <ol>
+                <li>Would a 32-year-old woman hosting brunch buy this? (Adult-first test)</li>
+                <li>Would a TJX buyer put this in HomeGoods? (Off-price scalability test)</li>
+                <li>Could we sell a refill/expansion/sequel? (System logic test)</li>
+                <li>Does this create social content opportunity? (Brand amplification test)</li>
+                <li>Is this defensible without licensing fees? (Ownership test)</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Keywords to Monitor -->
+    <div class="section">
+        <div class="section-title">
+            <div class="icon indigo">📡</div>
+            Keywords to Monitor
+        </div>
+        <div class="keywords-grid">
+            <div class="keyword-tag">
+                <div class="pulse"></div>
+                "punch needle"
+            </div>
+            <div class="keyword-tag">
+                <div class="pulse"></div>
+                "hostess gift"
+            </div>
+            <div class="keyword-tag">
+                <div class="pulse"></div>
+                "modular party decor"
+            </div>
+            <div class="keyword-tag">
+                <div class="pulse"></div>
+                "adult craft night"
+            </div>
+            <div class="keyword-tag">
+                <div class="pulse"></div>
+                "dopamine decor"
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>HOUSE OF PARTY | 2026 Product Strategy | Adult-First · Social-Driven · Retail-Scalable</p>
+        <p style="margin-top:8px;">Generated by Claude Code | January 2026</p>
+    </div>
+
+    <script>
+        const colors = {
+            gold: '#fbbf24',
+            pink: '#f472b6',
+            indigo: '#6366f1',
+            emerald: '#10b981',
+            orange: '#f97316'
+        };
+
+        // Channel Fit Chart
+        const channelCtx = document.getElementById('channelChart').getContext('2d');
+        new Chart(channelCtx, {
+            type: 'bar',
+            data: {
+                labels: ['GATHER Arch', 'HOSTESS HERO', 'PIXELPOP', 'SAY IT', 'THREADIES'],
+                datasets: [
+                    {
+                        label: 'TJX',
+                        data: [90, 95, 85, 80, 75],
+                        backgroundColor: 'rgba(251,191,36,0.7)',
+                        borderColor: colors.gold,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Mass',
+                        data: [85, 70, 80, 90, 60],
+                        backgroundColor: 'rgba(244,114,182,0.7)',
+                        borderColor: colors.pink,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Specialty',
+                        data: [60, 85, 65, 75, 90],
+                        backgroundColor: 'rgba(99,102,241,0.7)',
+                        borderColor: colors.indigo,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: '#e2e8f0', padding: 12, font: { size: 11 } }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 9 } }
+                    },
+                    y: {
+                        title: { display: true, text: 'Fit Score %', color: '#94a3b8' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' },
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Price Range Chart
+        const priceCtx = document.getElementById('priceChart').getContext('2d');
+        new Chart(priceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['GATHER Arch', 'HOSTESS HERO', 'PIXELPOP', 'SAY IT', 'THREADIES'],
+                datasets: [
+                    {
+                        label: 'Min MSRP',
+                        data: [9.99, 19.99, 9.99, 9.99, 14.99],
+                        backgroundColor: 'rgba(99,102,241,0.5)',
+                        borderColor: colors.indigo,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Max MSRP',
+                        data: [29.99, 24.99, 24.99, 24.99, 34.99],
+                        backgroundColor: 'rgba(244,114,182,0.5)',
+                        borderColor: colors.pink,
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: '#e2e8f0', padding: 12, font: { size: 11 } }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 9 } }
+                    },
+                    y: {
+                        title: { display: true, text: 'MSRP ($)', color: '#94a3b8' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8', callback: (v) => '$' + v }
+                    }
+                }
+            }
+        });
+
+        // Competitive Whitespace Radar
+        const whiteSpaceCtx = document.getElementById('whiteSpaceChart').getContext('2d');
+        new Chart(whiteSpaceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Modularity', 'Adult Appeal', 'TJX Fit', 'System Logic', 'Design-Forward', 'Sustainability'],
+                datasets: [{
+                    label: 'HOP Strategy',
+                    data: [95, 90, 88, 92, 85, 80],
+                    backgroundColor: 'rgba(251,191,36,0.2)',
+                    borderColor: colors.gold,
+                    borderWidth: 2,
+                    pointBackgroundColor: colors.gold
+                }, {
+                    label: 'Competitors Avg',
+                    data: [40, 50, 60, 30, 70, 55],
+                    backgroundColor: 'rgba(148,163,184,0.2)',
+                    borderColor: '#94a3b8',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#94a3b8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: '#e2e8f0', font: { size: 11 } }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        angleLines: { color: 'rgba(255,255,255,0.1)' },
+                        pointLabels: { color: '#e2e8f0', font: { size: 10 } },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        // System vs Single-Use Chart
+        const systemCtx = document.getElementById('systemChart').getContext('2d');
+        new Chart(systemCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['System/Modular', 'Refill/Expansion', 'Standalone (but functional)'],
+                datasets: [{
+                    data: [45, 35, 20],
+                    backgroundColor: [
+                        'rgba(251,191,36,0.8)',
+                        'rgba(244,114,182,0.8)',
+                        'rgba(99,102,241,0.8)'
+                    ],
+                    borderColor: '#0c0c0c',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#e2e8f0', padding: 12, font: { size: 11 } }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Product Architecture Mix',
+                        color: '#94a3b8',
+                        font: { size: 11 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
