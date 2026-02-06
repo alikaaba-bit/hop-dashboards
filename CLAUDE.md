@@ -123,46 +123,58 @@ Automated daily sync of Petra Brands AR Aging Report from SharePoint to Supabase
 - `automation/aging/sync_aging.py` - Python sync script
 - `automation/aging/schema.sql` - Database schema (3 tables + views)
 - `automation/aging/requirements.txt` - Python dependencies
+- `automation/aging/find_sharepoint_files.py` - Helper to locate files
 - `.github/workflows/sync-aging.yml` - GitHub Actions workflow
 
+**Data Source:**
+- **File:** `Aging_Dashboard.xlsx` (in Maira's OneDrive: maira@petrabrands.com)
+- **Sheet:** "Detailed Invoices" with invoice-level detail
+- **Location:** swiftstartagency-my.sharepoint.com personal drive
+- **Last Synced:** Feb 6, 2026 - 362 unique invoices
+
 **Features:**
-- Downloads AR Aging Excel from SharePoint
-- Parses detailed invoice data (brand, retailer, amounts, aging buckets)
+- Downloads AR Aging Excel from Maira's OneDrive via Microsoft Graph API
+- Parses detailed invoice data (brand, retailer, PO#, invoice#, invoice date, due date, amounts, aging buckets, status)
 - Normalizes brand names (FOMIN → Fomin, HOP → House of Party)
+- Deduplicates invoices by (brand, invoice_number) before upserting
 - Upserts to 3 tables: invoices, summary, snapshots
 - Creates daily snapshots for trend tracking
 - Scheduled daily at 7 AM UTC via GitHub Actions
 
 **Tables:**
-- `retail_aging_invoices` - Invoice-level detail (471+ invoices)
-- `retail_aging_summary` - Brand/retailer summaries
-- `retail_aging_snapshots` - Daily snapshots for trends
+- `retail_aging_invoices` - Invoice-level detail (362 unique invoices)
+- `retail_aging_summary` - Brand/retailer summaries (not yet populated)
+- `retail_aging_snapshots` - Daily snapshots for trends (4 brands tracked)
 - `vw_aging_overview` - View for brand-level overview
 - `vw_aging_by_retailer` - View for retailer breakdown
 
-**Current Data:**
-- Fomin: 285 invoices, $689K outstanding ($39K at 90+ days)
-- House of Party: 134 invoices, $1.98M outstanding
-- Roofus: 35 invoices, $155K outstanding
-- EveryMood: 17 invoices, $166K outstanding
-- Top retailers: TJX (181), Target (89), Bealls (49), CVS (33), KeHe (32)
+**Current Data (Last Sync: Feb 6, 2026):**
+- 362 unique invoices across 4 brands
+- Brands: Fomin, House of Party, Roofus, EveryMood
+- Retailers: KeHe, TJX, Target, CVS, Bealls, and more
+- Automatic deduplication removes ~109 duplicate entries
 
 **Quick Start:**
 ```bash
 # Install dependencies
 pip install -r automation/aging/requirements.txt
 
-# Create Supabase tables
+# Create Supabase tables (one-time setup)
 cat automation/aging/schema.sql
-# → Copy to Supabase SQL Editor
+# → Copy to Supabase SQL Editor and run
 
-# Test sync
+# Test sync locally
 cd automation/aging
-python sync_aging.py
+python3 sync_aging.py
 
 # View logs
 tail -f ../../logs/aging_sync.log
+
+# Trigger GitHub Actions manually
+gh workflow run sync-aging.yml
 ```
+
+**Status:** ✅ Fully operational - syncing daily at 7 AM UTC
 
 See `automation/aging/README.md` for full documentation.
 
