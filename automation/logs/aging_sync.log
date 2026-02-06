@@ -1,0 +1,98 @@
+[2026-02-06 03:27:56] [INFO] ============================================================
+[2026-02-06 03:27:56] [INFO] Starting AR Aging Report Sync
+[2026-02-06 03:27:56] [INFO] ============================================================
+[2026-02-06 03:27:56] [INFO] Authenticating with Microsoft Graph...
+[2026-02-06 03:28:00] [INFO] Getting SharePoint site ID...
+[2026-02-06 03:28:06] [INFO] Site ID: swiftstartagency.sharepoint.com,f10aefa0-22da-4a0b-9e6d-ee2f030a93fd,b9fd2a77-0897-40b8-9732-3f79d73a0b8a
+[2026-02-06 03:28:06] [INFO] Searching for file: HOP Internal Invoices - 2025.xlsx
+[2026-02-06 03:28:16] [INFO] Found file (Drive: b!oO8K8doiC0qebe4vAwqT_Xcq_bmXCLhAlzI_edc6C4pAOJpRCdDGTb49apUIKmsU, Item: 0132KGJCUIA4DD5BL2Q5A3HWDYHAL2NPA4)
+[2026-02-06 03:28:16] [INFO] Downloading Excel file...
+[2026-02-06 03:28:21] [INFO] Downloaded to /tmp/aging_report.xlsx
+[2026-02-06 03:28:21] [INFO] Parsing Excel data...
+[2026-02-06 03:28:21] [INFO] Parsed 0 invoices from Excel
+[2026-02-06 03:28:21] [INFO] Syncing to Supabase...
+[2026-02-06 03:28:21] [INFO] Syncing 0 invoices to Supabase...
+[2026-02-06 03:28:21] [INFO] Creating daily snapshots...
+[2026-02-06 03:28:25] [ERROR] Error creating snapshots: EOF occurred in violation of protocol (_ssl.c:1129)
+[2026-02-06 03:28:25] [INFO] ============================================================
+[2026-02-06 03:28:25] [INFO] Sync Complete
+[2026-02-06 03:28:25] [INFO]   Invoices synced: 0
+[2026-02-06 03:28:25] [INFO]   Brands: 0
+[2026-02-06 03:28:25] [INFO] ============================================================
+[2026-02-06 03:34:43] [INFO] ============================================================
+[2026-02-06 03:34:43] [INFO] Starting AR Aging Report Sync
+[2026-02-06 03:34:43] [INFO] ============================================================
+[2026-02-06 03:34:43] [INFO] Authenticating with Microsoft Graph...
+[2026-02-06 03:34:46] [INFO] Getting SharePoint site ID...
+[2026-02-06 03:34:49] [INFO] Site ID: swiftstartagency.sharepoint.com,f10aefa0-22da-4a0b-9e6d-ee2f030a93fd,b9fd2a77-0897-40b8-9732-3f79d73a0b8a
+[2026-02-06 03:34:49] [INFO] Searching for file: Aging_Dashboard.xlsx
+[2026-02-06 03:34:55] [INFO] Found file (Drive: b!O8k6jUdcXEuLBEWbFDmfRTXDj6I0qGRGhiHcOvSBrZbe1jo1jdNWQaFnYLogCDqu, Item: 01S5ORGZ5ATGPVYH6CZBCKEKO57AXKE4FL)
+[2026-02-06 03:34:55] [INFO] Downloading Excel file...
+[2026-02-06 03:35:01] [INFO] Downloaded to /tmp/aging_report.xlsx
+[2026-02-06 03:35:01] [INFO] Parsing Excel data...
+[2026-02-06 03:35:01] [INFO] Parsed 471 invoices from Excel
+[2026-02-06 03:35:01] [INFO] Syncing to Supabase...
+[2026-02-06 03:35:01] [INFO] Syncing 471 invoices to Supabase...
+[2026-02-06 03:35:01] [ERROR] Error upserting batch 1: Object of type datetime is not JSON serializable
+[2026-02-06 03:35:01] [ERROR] Error upserting batch 2: Object of type datetime is not JSON serializable
+[2026-02-06 03:35:01] [ERROR] Error upserting batch 3: Object of type datetime is not JSON serializable
+[2026-02-06 03:35:01] [ERROR] Error upserting batch 4: Object of type datetime is not JSON serializable
+[2026-02-06 03:35:01] [ERROR] Error upserting batch 5: Object of type datetime is not JSON serializable
+[2026-02-06 03:35:01] [INFO] Creating daily snapshots...
+[2026-02-06 03:35:01] [ERROR] Error creating snapshots: Object of type date is not JSON serializable
+[2026-02-06 03:35:01] [INFO] ============================================================
+[2026-02-06 03:35:01] [INFO] Sync Complete
+[2026-02-06 03:35:01] [INFO]   Invoices synced: 0
+[2026-02-06 03:35:01] [INFO]   Brands: 4
+[2026-02-06 03:35:01] [INFO] ============================================================
+[2026-02-06 03:35:50] [INFO] ============================================================
+[2026-02-06 03:35:50] [INFO] Starting AR Aging Report Sync
+[2026-02-06 03:35:50] [INFO] ============================================================
+[2026-02-06 03:35:50] [INFO] Authenticating with Microsoft Graph...
+[2026-02-06 03:35:53] [INFO] Getting SharePoint site ID...
+[2026-02-06 03:35:56] [INFO] Site ID: swiftstartagency.sharepoint.com,f10aefa0-22da-4a0b-9e6d-ee2f030a93fd,b9fd2a77-0897-40b8-9732-3f79d73a0b8a
+[2026-02-06 03:35:56] [INFO] Searching for file: Aging_Dashboard.xlsx
+[2026-02-06 03:36:03] [INFO] Found file (Drive: b!O8k6jUdcXEuLBEWbFDmfRTXDj6I0qGRGhiHcOvSBrZbe1jo1jdNWQaFnYLogCDqu, Item: 01S5ORGZ5ATGPVYH6CZBCKEKO57AXKE4FL)
+[2026-02-06 03:36:03] [INFO] Downloading Excel file...
+[2026-02-06 03:36:09] [INFO] Downloaded to /tmp/aging_report.xlsx
+[2026-02-06 03:36:09] [INFO] Parsing Excel data...
+[2026-02-06 03:36:09] [INFO] Parsed 471 invoices from Excel
+[2026-02-06 03:36:09] [INFO] Syncing to Supabase...
+[2026-02-06 03:36:09] [INFO] Syncing 471 invoices to Supabase...
+[2026-02-06 03:36:11] [INFO] Batch 1: 100/471
+[2026-02-06 03:36:12] [ERROR] Error upserting batch 2: {'message': 'ON CONFLICT DO UPDATE command cannot affect row a second time', 'code': '21000', 'hint': 'Ensure that no rows proposed for insertion within the same command have duplicate constrained values.', 'details': None}
+[2026-02-06 03:36:13] [INFO] Batch 3: 200/471
+[2026-02-06 03:36:13] [ERROR] Error upserting batch 4: {'message': 'ON CONFLICT DO UPDATE command cannot affect row a second time', 'code': '21000', 'hint': 'Ensure that no rows proposed for insertion within the same command have duplicate constrained values.', 'details': None}
+[2026-02-06 03:36:14] [ERROR] Error upserting batch 5: {'message': 'ON CONFLICT DO UPDATE command cannot affect row a second time', 'code': '21000', 'hint': 'Ensure that no rows proposed for insertion within the same command have duplicate constrained values.', 'details': None}
+[2026-02-06 03:36:14] [INFO] Creating daily snapshots...
+[2026-02-06 03:36:14] [INFO] Created 4 snapshots
+[2026-02-06 03:36:14] [INFO] ============================================================
+[2026-02-06 03:36:14] [INFO] Sync Complete
+[2026-02-06 03:36:15] [INFO]   Invoices synced: 200
+[2026-02-06 03:36:15] [INFO]   Brands: 4
+[2026-02-06 03:36:15] [INFO] ============================================================
+[2026-02-06 03:36:38] [INFO] ============================================================
+[2026-02-06 03:36:38] [INFO] Starting AR Aging Report Sync
+[2026-02-06 03:36:38] [INFO] ============================================================
+[2026-02-06 03:36:38] [INFO] Authenticating with Microsoft Graph...
+[2026-02-06 03:36:43] [INFO] Getting SharePoint site ID...
+[2026-02-06 03:36:45] [INFO] Site ID: swiftstartagency.sharepoint.com,f10aefa0-22da-4a0b-9e6d-ee2f030a93fd,b9fd2a77-0897-40b8-9732-3f79d73a0b8a
+[2026-02-06 03:36:45] [INFO] Searching for file: Aging_Dashboard.xlsx
+[2026-02-06 03:36:52] [INFO] Found file (Drive: b!O8k6jUdcXEuLBEWbFDmfRTXDj6I0qGRGhiHcOvSBrZbe1jo1jdNWQaFnYLogCDqu, Item: 01S5ORGZ5ATGPVYH6CZBCKEKO57AXKE4FL)
+[2026-02-06 03:36:52] [INFO] Downloading Excel file...
+[2026-02-06 03:36:58] [INFO] Downloaded to /tmp/aging_report.xlsx
+[2026-02-06 03:36:58] [INFO] Parsing Excel data...
+[2026-02-06 03:36:58] [INFO] Parsed 471 invoices from Excel
+[2026-02-06 03:36:58] [INFO] Syncing to Supabase...
+[2026-02-06 03:36:58] [INFO] Syncing 362 unique invoices to Supabase...
+[2026-02-06 03:37:00] [INFO] Batch 1: 100/362
+[2026-02-06 03:37:01] [INFO] Batch 2: 200/362
+[2026-02-06 03:37:01] [INFO] Batch 3: 300/362
+[2026-02-06 03:37:02] [INFO] Batch 4: 362/362
+[2026-02-06 03:37:02] [INFO] Creating daily snapshots...
+[2026-02-06 03:37:02] [INFO] Created 4 snapshots
+[2026-02-06 03:37:02] [INFO] ============================================================
+[2026-02-06 03:37:02] [INFO] Sync Complete
+[2026-02-06 03:37:02] [INFO]   Invoices synced: 362
+[2026-02-06 03:37:02] [INFO]   Brands: 4
+[2026-02-06 03:37:02] [INFO] ============================================================

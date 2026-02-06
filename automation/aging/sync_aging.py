@@ -27,7 +27,8 @@ CONFIG = {
     'supabase_key': os.getenv('SUPABASE_KEY'),
     'sharepoint_site': 'swiftstartagency.sharepoint.com',
     'site_path': '/sites/PetraBrands',
-    'file_name': 'HOP Retail Sales & PO Tracker - 2025-2026 - Sales Copy.xlsx',
+    'file_name': 'Aging_Dashboard.xlsx',
+    'user_email': 'maira@petrabrands.com',  # User's OneDrive where file is located
     'log_file': Path(__file__).parent.parent / 'logs' / 'aging_sync.log',
 }
 
@@ -60,26 +61,42 @@ def get_site_id(access_token):
     response.raise_for_status()
     return response.json()['id']
 
-def find_file(access_token, site_id):
-    """Find the aging report file in SharePoint"""
-    drives_url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
+def find_file(access_token, site_id=None):
+    """Find the aging report file in user's OneDrive or SharePoint"""
     headers = {'Authorization': f'Bearer {access_token}'}
 
-    drives_response = requests.get(drives_url, headers=headers)
-    drives_response.raise_for_status()
-    drives = drives_response.json().get('value', [])
+    # First try user's OneDrive
+    user_drive_url = f"https://graph.microsoft.com/v1.0/users/{CONFIG['user_email']}/drive"
+    response = requests.get(user_drive_url, headers=headers)
 
-    for drive in drives:
-        drive_id = drive['id']
+    if response.ok:
+        drive_id = response.json()['id']
         search_url = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root/search(q='{CONFIG['file_name']}')"
-
         search_response = requests.get(search_url, headers=headers)
-        search_response.raise_for_status()
-        items = search_response.json().get('value', [])
 
-        for item in items:
-            if CONFIG['file_name'].lower() in item.get('name', '').lower():
-                return drive_id, item['id']
+        if search_response.ok:
+            items = search_response.json().get('value', [])
+            for item in items:
+                if CONFIG['file_name'].lower() in item.get('name', '').lower():
+                    return drive_id, item['id']
+
+    # Fallback to site drives if not found in OneDrive
+    if site_id:
+        drives_url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
+        drives_response = requests.get(drives_url, headers=headers)
+        drives_response.raise_for_status()
+        drives = drives_response.json().get('value', [])
+
+        for drive in drives:
+            drive_id = drive['id']
+            search_url = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root/search(q='{CONFIG['file_name']}')"
+            search_response = requests.get(search_url, headers=headers)
+            search_response.raise_for_status()
+            items = search_response.json().get('value', [])
+
+            for item in items:
+                if CONFIG['file_name'].lower() in item.get('name', '').lower():
+                    return drive_id, item['id']
 
     raise FileNotFoundError(f"File not found: {CONFIG['file_name']}")
 
@@ -123,13 +140,26 @@ def parse_excel(file_path):
             if not row[0]:  # Skip empty rows
                 continue
 
+            # Convert dates to ISO format strings for JSON serialization
+            invoice_date = row[4]
+            if isinstance(invoice_date, (date, datetime)):
+                invoice_date = invoice_date.isoformat() if hasattr(invoice_date, 'isoformat') else str(invoice_date)
+            else:
+                invoice_date = None
+
+            due_date = row[5]
+            if isinstance(due_date, (date, datetime)):
+                due_date = due_date.isoformat() if hasattr(due_date, 'isoformat') else str(due_date)
+            else:
+                due_date = None
+
             invoice = {
                 'brand': normalize_brand(row[0]) if row[0] else None,
                 'retailer': str(row[1]).strip() if row[1] else None,
                 'po_number': str(row[2]).strip() if row[2] else None,
                 'invoice_number': str(row[3]).strip().replace('\n', '') if row[3] else None,
-                'invoice_date': row[4] if isinstance(row[4], date) else None,
-                'due_date': row[5] if isinstance(row[5], date) else None,
+                'invoice_date': invoice_date,
+                'due_date': due_date,
                 'invoice_amount': float(row[6]) if row[6] else 0,
                 'received': float(row[7]) if row[7] else 0,
                 'outstanding': float(row[8]) if row[8] else 0,
@@ -137,7 +167,7 @@ def parse_excel(file_path):
                 'aging_bucket': str(row[10]).strip() if row[10] else 'Not Yet Due',
                 'status': str(row[11]).strip() if row[11] else 'Not Due',
                 'delay_remarks': str(row[12]).strip() if row[12] else None,
-                'report_date': date.today(),
+                'report_date': date.today().isoformat(),
             }
 
             if invoice['invoice_number']:
@@ -154,8 +184,15 @@ def sync_to_supabase(invoices, summaries):
     """Upsert data to Supabase"""
     supabase: Client = create_client(CONFIG['supabase_url'], CONFIG['supabase_key'])
 
+    # Deduplicate invoices by (brand, invoice_number) - keep last occurrence
+    seen = {}
+    for invoice in invoices:
+        key = (invoice['brand'], invoice['invoice_number'])
+        seen[key] = invoice
+    invoices = list(seen.values())
+
     # Sync invoices (batch upsert)
-    log(f"Syncing {len(invoices)} invoices to Supabase...")
+    log(f"Syncing {len(invoices)} unique invoices to Supabase...")
     batch_size = 100
     upserted = 0
 
@@ -182,7 +219,7 @@ def sync_to_supabase(invoices, summaries):
         overdue = total_outstanding - not_yet_due
 
         snapshot = {
-            'snapshot_date': date.today(),
+            'snapshot_date': date.today().isoformat(),
             'brand': brand,
             'total_outstanding': total_outstanding,
             'not_yet_due': not_yet_due,

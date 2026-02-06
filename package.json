@@ -1,0 +1,28 @@
+{
+  "name": "hop-dashboards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alikaaba-bit/hop-dashboards.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/alikaaba-bit/hop-dashboards/issues"
+  },
+  "homepage": "https://github.com/alikaaba-bit/hop-dashboards#readme",
+  "dependencies": {
+    "@azure/identity": "^4.13.0",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
+    "@supabase/supabase-js": "^2.95.2",
+    "dotenv": "^17.2.4",
+    "xlsx": "^0.18.5"
+  }
+}
