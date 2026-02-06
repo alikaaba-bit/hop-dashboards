@@ -115,6 +115,57 @@ tail -f logs/sync.log
 
 See `automation/README.md` for full documentation.
 
+### AR Aging Report Sync
+
+Automated daily sync of Petra Brands AR Aging Report from SharePoint to Supabase.
+
+**Key Files:**
+- `automation/aging/sync_aging.py` - Python sync script
+- `automation/aging/schema.sql` - Database schema (3 tables + views)
+- `automation/aging/requirements.txt` - Python dependencies
+- `.github/workflows/sync-aging.yml` - GitHub Actions workflow
+
+**Features:**
+- Downloads AR Aging Excel from SharePoint
+- Parses detailed invoice data (brand, retailer, amounts, aging buckets)
+- Normalizes brand names (FOMIN → Fomin, HOP → House of Party)
+- Upserts to 3 tables: invoices, summary, snapshots
+- Creates daily snapshots for trend tracking
+- Scheduled daily at 7 AM UTC via GitHub Actions
+
+**Tables:**
+- `retail_aging_invoices` - Invoice-level detail (471+ invoices)
+- `retail_aging_summary` - Brand/retailer summaries
+- `retail_aging_snapshots` - Daily snapshots for trends
+- `vw_aging_overview` - View for brand-level overview
+- `vw_aging_by_retailer` - View for retailer breakdown
+
+**Current Data:**
+- Fomin: 285 invoices, $689K outstanding ($39K at 90+ days)
+- House of Party: 134 invoices, $1.98M outstanding
+- Roofus: 35 invoices, $155K outstanding
+- EveryMood: 17 invoices, $166K outstanding
+- Top retailers: TJX (181), Target (89), Bealls (49), CVS (33), KeHe (32)
+
+**Quick Start:**
+```bash
+# Install dependencies
+pip install -r automation/aging/requirements.txt
+
+# Create Supabase tables
+cat automation/aging/schema.sql
+# → Copy to Supabase SQL Editor
+
+# Test sync
+cd automation/aging
+python sync_aging.py
+
+# View logs
+tail -f ../../logs/aging_sync.log
+```
+
+See `automation/aging/README.md` for full documentation.
+
 ## Project Structure
 
 ```
@@ -122,16 +173,24 @@ hop-dashboards/
 ├── CLAUDE.md                               # This file - project context
 ├── SETUP.md                                # Quick start guide
 ├── *.html                                  # Dashboard files
+├── .github/workflows/
+│   └── sync-aging.yml                      # AR Aging daily sync workflow
 ├── automation/
-│   ├── sync-hop-tracker.js                 # Main sync script
+│   ├── sync-hop-tracker.js                 # PO Tracker sync (Node.js)
+│   ├── supabase-schema.sql                 # PO Tracker schema
 │   ├── setup-scheduler.sh                  # Scheduler installer
-│   ├── supabase-schema.sql                 # Database schema
-│   ├── .env                                # Configuration
-│   └── README.md                           # Full automation docs
+│   ├── .env                                # Configuration (private)
+│   ├── README.md                           # Full automation docs
+│   └── aging/
+│       ├── sync_aging.py                   # AR Aging sync (Python)
+│       ├── schema.sql                      # AR Aging schema
+│       ├── requirements.txt                # Python dependencies
+│       └── README.md                       # Aging sync docs
 ├── logs/
-│   ├── sync.log                            # Sync operation logs
+│   ├── sync.log                            # PO Tracker logs
+│   ├── aging_sync.log                      # AR Aging logs
 │   └── tracking.json                       # File change tracking
-└── package.json                            # Dependencies
+└── package.json                            # Node.js dependencies
 ```
 
 ## Technology Stack
@@ -142,12 +201,15 @@ hop-dashboards/
 - Responsive design for desktop/mobile
 
 ### Automation
-- **Node.js** - Runtime
+- **Node.js** - PO Tracker sync runtime
+- **Python 3.11** - AR Aging sync runtime
 - **@azure/identity** - Azure AD authentication
 - **@microsoft/microsoft-graph-client** - SharePoint API
 - **@supabase/supabase-js** - Database operations
-- **xlsx** - Excel file parsing
-- **macOS LaunchAgent** - Daily scheduling
+- **openpyxl** - Python Excel parsing
+- **xlsx** - Node.js Excel parsing
+- **macOS LaunchAgent** - Local scheduling
+- **GitHub Actions** - Cloud scheduling
 
 ## Environment Configuration
 
